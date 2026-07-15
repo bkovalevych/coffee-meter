@@ -9,10 +9,10 @@ import SwiftUI
 import SwiftData
 
 @main
-struct coffee_meterApp: App {
+struct CoffeeMeterApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            CoffeePurchase.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
