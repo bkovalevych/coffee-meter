@@ -12,9 +12,9 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \CoffeePurchase.date, order: .reverse) private var purchases: [CoffeePurchase]
 
+    @State private var settings = UserSettings.shared
     @State private var showSettings = false
     @State private var showChart = false
-    @State private var monthlyBudget: Decimal = 1000
 
     var body: some View {
         ZStack {
@@ -96,7 +96,7 @@ struct ContentView: View {
                                 .foregroundStyle(Color.accentOrange)
                                 .tracking(1)
 
-                            Text(monthlyTotal, format: .currency(code: "UAH"))
+                            Text(monthlyTotal, format: .currency(code: settings.currency.rawValue))
                                 .font(.system(size: adaptivePriceFontSize, weight: .bold, design: .rounded))
                                 .foregroundStyle(Color.coffeeBrown)
                                 .minimumScaleFactor(0.5)
@@ -124,7 +124,7 @@ struct ContentView: View {
 
                                 Spacer()
 
-                                Text(budgetRemaining, format: .currency(code: "UAH"))
+                                Text(budgetRemaining, format: .currency(code: settings.currency.rawValue))
                                     .font(.system(size: 20, weight: .bold, design: .rounded))
                                     .foregroundStyle(Color.coffeeBrown)
                             }
@@ -195,19 +195,19 @@ struct ContentView: View {
     }
 
     private var budgetRemaining: Decimal {
-        max(monthlyBudget - monthlyTotal, 0)
+        max(Decimal(settings.monthlyBudget) - monthlyTotal, 0)
     }
 
     private var budgetProgress: Double {
         let spent = NSDecimalNumber(decimal: monthlyTotal).doubleValue
-        let budget = NSDecimalNumber(decimal: monthlyBudget).doubleValue
+        let budget = settings.monthlyBudget
         return min(spent / budget, 1.0)
     }
 
     private var adaptivePriceFontSize: CGFloat {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
-        formatter.currencyCode = "UAH"
+        formatter.currencyCode = settings.currency.rawValue
         let priceString = formatter.string(from: NSDecimalNumber(decimal: monthlyTotal)) ?? ""
 
         // Adjust font size based on string length
@@ -234,25 +234,6 @@ struct ContentView: View {
 }
 
 // MARK: - Placeholder Views
-
-struct SettingsView: View {
-    @Environment(\.dismiss) private var dismiss
-
-    var body: some View {
-        NavigationStack {
-            Text("Settings - Coming Soon")
-                .navigationTitle("Налаштування")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button("Закрити") {
-                            dismiss()
-                        }
-                    }
-                }
-        }
-    }
-}
 
 struct ChartView: View {
     @Environment(\.dismiss) private var dismiss
