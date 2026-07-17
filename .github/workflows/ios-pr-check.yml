@@ -6,7 +6,7 @@ on:
     types: [ opened, synchronize, reopened ]
 
 env:
-  XCODE_VERSION: '15.4'
+  XCODE_VERSION: '16.2'
   SCHEME: 'coffee meter'
 
 jobs:
@@ -89,7 +89,7 @@ jobs:
           -scheme "${{ env.SCHEME }}" \
           -configuration Debug \
           -sdk iphonesimulator \
-          -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
+          -destination 'platform=iOS Simulator,name=iPhone 16 Pro' \
           -only-testing:coffee_meterTests \
           -enableCodeCoverage YES \
           CODE_SIGN_IDENTITY="" \

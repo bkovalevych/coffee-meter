@@ -15,7 +15,7 @@ on:
           - production
 
 env:
-  XCODE_VERSION: '15.4'
+  XCODE_VERSION: '16.2'
   SCHEME: 'coffee meter'
 
 jobs:
@@ -74,7 +74,7 @@ jobs:
           -scheme "${{ env.SCHEME }}" \
           -configuration Debug \
           -sdk iphonesimulator \
-          -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
+          -destination 'platform=iOS Simulator,name=iPhone 16 Pro' \
           CODE_SIGN_IDENTITY="" \
           CODE_SIGNING_REQUIRED=NO \
           CODE_SIGNING_ALLOWED=NO \
@@ -164,7 +164,7 @@ jobs:
           -scheme "${{ env.SCHEME }}" \
           -configuration Release \
           -sdk iphonesimulator \
-          -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
+          -destination 'platform=iOS Simulator,name=iPhone 16 Pro' \
           CODE_SIGN_IDENTITY="" \
           CODE_SIGNING_REQUIRED=NO \
           CODE_SIGNING_ALLOWED=NO \
