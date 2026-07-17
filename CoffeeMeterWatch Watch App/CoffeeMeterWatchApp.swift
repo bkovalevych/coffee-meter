@@ -1,15 +1,15 @@
 //
-//  coffee_meterApp.swift
-//  coffee meter
+//  CoffeeMeterWatchApp.swift
+//  CoffeeMeterWatch Watch App
 //
-//  Created by Bohdan Kovalevych on 15.07.2026.
+//  Created by Bohdan Kovalevych on 17.07.2026.
 //
 
 import SwiftUI
 import SwiftData
 
 @main
-struct CoffeeMeterApp: App {
+struct CoffeeMeterWatch_Watch_AppApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             CoffeePurchase.self,

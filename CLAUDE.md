@@ -72,17 +72,30 @@ class CoffeePurchase {
 - No manual database setup needed
 
 ## Key Features
-1. Add coffee purchase (amount + optional note) - **with celebration animation**
-2. View purchase history (list with smooth transitions)
-3. Monthly summary with chart visualization
-4. Lock screen widget (iOS WidgetKit)
-5. Apple Watch app (WatchConnectivity for sync)
-6. Dark mode support (automatic)
+1. ✅ Add coffee purchase (manual test button)
+2. ✅ View monthly total with adaptive font sizing
+3. ✅ Budget tracking with progress bar
+4. ✅ Settings page (language, currency, budget)
+5. ✅ Full localization (English + Ukrainian)
+6. ✅ Lock screen widgets (3 types: circular, rectangular, inline)
+7. 🔄 View purchase history (planned)
+8. 🔄 Monthly summary with chart visualization (placeholder exists)
+9. 🔄 Celebration animations (Lottie, Confetti - planned)
+10. 🔄 Apple Watch app (WatchConnectivity for sync - planned)
+11. ✅ Dark mode support (automatic)
 
 ## Architecture
-- **iPhone App**: Main UI, data entry, history
-- **Widget Extension**: Read-only access to SwiftData, shows monthly total
-- **Watch App**: View total, quick add (synced via WatchConnectivity)
+- **iPhone App**: Main UI, data entry, history, settings
+  - ContentView: Main screen with monthly total, budget progress
+  - SettingsView: Language, currency, budget configuration
+  - Theme: Custom color palette (coffee brown, cream, orange accent)
+  - LocalizationManager: Runtime language switching
+- **Widget Extension**: Lock screen widgets (WidgetKit)
+  - Circular: Shows monthly cost with currency symbol
+  - Rectangular: Shows cost/budget ratio with progress bar
+  - Inline: Single line text format (☕ 450/1000 ₴)
+  - Updates hourly, reads from shared SwiftData container
+- **Watch App**: View total, quick add (synced via WatchConnectivity) - *planned*
 
 ## Development Notes
 - User has backend C# experience, learning Swift/iOS
@@ -90,8 +103,42 @@ class CoffeePurchase {
 - Use native SwiftUI animations first (springs, easeInOut)
 - Fast deployment to TestFlight/App Store
 
-## Recommended First Additions
+## Widget Setup Instructions
+
+The widget files have been created in `CoffeeMeterWidget/` directory:
+- `CoffeeMeterWidget.swift` - Main widget with 3 views (circular, rectangular, inline)
+- `CoffeeMeterWidgetBundle.swift` - Widget bundle entry point
+- `Info.plist` - Widget extension configuration
+
+**To add the widget to your Xcode project:**
+
+1. In Xcode, go to File → New → Target
+2. Select "Widget Extension" template
+3. Name it "CoffeeMeterWidget"
+4. When prompted, do NOT activate the scheme
+5. Delete the auto-generated files in the new `CoffeeMeterWidget` folder
+6. Drag the widget files from `CoffeeMeterWidget/` into the widget target in Xcode
+7. Make sure to check "Copy items if needed" and add to "CoffeeMeterWidget" target
+
+**Configure App Group for data sharing:**
+
+1. In the main app target capabilities, enable "App Groups"
+2. Add a new group: `group.com.yourdomain.coffeemeter`
+3. In the widget target capabilities, enable "App Groups"
+4. Add the same group: `group.com.yourdomain.coffeemeter`
+5. Update SwiftData ModelConfiguration to use the shared container
+
+**Testing the widget:**
+
+1. Build and run the main app
+2. Add some coffee purchases to populate data
+3. Long-press on the lock screen
+4. Tap "Customize"
+5. Add the "Coffee Meter" widget
+6. Choose circular, rectangular, or inline style
+
+## Recommended Next Additions
 1. **Lottie** - coffee cup animation when adding purchase
-2. **SF Symbols** - all icons (no extra library needed)
+2. **SF Symbols** - all icons (already using some)
 3. **Swift Charts** - monthly spending chart
 4. **ConfettiSwiftUI** - celebration when adding coffee
