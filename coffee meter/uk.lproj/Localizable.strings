@@ -1,0 +1,59 @@
+/* Main Screen */
+"app.title" = "Coffee Meter";
+"app.subtitle" = "офіційний бухгалтер твоєї кавової залежності";
+"button.add_coffee" = "Записати ще одну каву";
+"card.monthly_spending" = "ВИТРАЧЕНО ЦЬОГО МІСЯЦЯ";
+"card.monthly_quote" = "Ще трохи — і кав'ярня внесе тебе у заповіт.";
+"card.budget_remaining" = "ДО ГАНЬБИ ЛИШИЛОСЬ";
+"button.ai_excuse" = "Придумати відмазку (AI)";
+
+/* Settings Screen */
+"settings.title" = "Налаштування";
+"settings.done" = "Готово";
+"settings.close" = "Закрити";
+
+/* Settings - Banks Section */
+"settings.banks.title" = "Підключені банки";
+"settings.banks.description" = "Автозапис оплат кав'ярень";
+"settings.banks.monobank" = "monobank";
+"settings.banks.privat" = "Приват24";
+
+/* Settings - Budget Section */
+"settings.budget.title" = "Місячний бюджет";
+"settings.budget.description" = "Максимальна сума витрат на каву за місяць";
+
+/* Settings - Language Section */
+"settings.language.title" = "Мова";
+"settings.language.picker_label" = "Мова";
+
+/* Settings - Currency Section */
+"settings.currency.title" = "Валюта";
+"settings.currency.picker_label" = "Валюта";
+
+/* Settings - Reset Section */
+"settings.reset.button" = "Скинути до заводських налаштувань";
+"settings.reset.alert.title" = "Скинути налаштування?";
+"settings.reset.alert.message" = "Це видалить всі записи про покупки кави та скине бюджет до значення за замовчуванням (1000). Мова та валюта залишаться незмінними.";
+"settings.reset.alert.cancel" = "Скасувати";
+"settings.reset.alert.confirm" = "Скинути";
+
+/* Settings - Coming Soon Alert */
+"alert.coming_soon.title" = "Незабаром!";
+"alert.coming_soon.bank_message" = "Підключення банків буде доступне в наступній версії";
+"alert.coming_soon.ok" = "OK";
+
+/* Settings - Language Changed Alert */
+"alert.language_changed.title" = "Мову змінено";
+"alert.language_changed.message" = "Зміни будуть застосовані після перезапуску програми";
+
+/* Chart Screen */
+"chart.title" = "Статистика";
+"chart.placeholder" = "Chart - Coming Soon";
+
+/* Language Names */
+"language.ukrainian" = "Українська";
+"language.english" = "English";
+
+/* Currency Names */
+"currency.uah" = "Гривня (₴)";
+"currency.usd" = "Долар ($)";

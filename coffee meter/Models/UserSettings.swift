@@ -13,8 +13,8 @@ enum Language: String, CaseIterable {
 
     var displayName: String {
         switch self {
-        case .ukrainian: return "Українська"
-        case .english: return "English"
+        case .ukrainian: return "language.ukrainian".localized()
+        case .english: return "language.english".localized()
         }
     }
 }
@@ -25,8 +25,8 @@ enum Currency: String, CaseIterable {
 
     var displayName: String {
         switch self {
-        case .uah: return "Гривня (₴)"
-        case .usd: return "Долар ($)"
+        case .uah: return "currency.uah".localized()
+        case .usd: return "currency.usd".localized()
         }
     }
 
@@ -49,6 +49,9 @@ class UserSettings {
     @ObservationIgnored
     @AppStorage("monthlyBudget") var monthlyBudget: Double = 1000.0
 
+    // Tracked properties for triggering view updates
+    var currentCurrency: Currency = .uah
+
     var language: Language {
         get { Language(rawValue: languageRawValue) ?? .ukrainian }
         set { languageRawValue = newValue.rawValue }
@@ -56,12 +59,20 @@ class UserSettings {
 
     var currency: Currency {
         get { Currency(rawValue: currencyRawValue) ?? .uah }
-        set { currencyRawValue = newValue.rawValue }
+        set {
+            currencyRawValue = newValue.rawValue
+            currentCurrency = newValue
+        }
     }
 
     static let shared = UserSettings()
 
     static let defaultBudget: Double = 1000.0
+
+    init() {
+        // Initialize tracked currency from stored value
+        self.currentCurrency = Currency(rawValue: currencyRawValue) ?? .uah
+    }
 
     func resetToDefaults() {
         monthlyBudget = UserSettings.defaultBudget

@@ -12,11 +12,15 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \CoffeePurchase.date, order: .reverse) private var purchases: [CoffeePurchase]
 
+    @StateObject private var localization = LocalizationManager.shared
     @State private var settings = UserSettings.shared
     @State private var showSettings = false
     @State private var showChart = false
 
     var body: some View {
+        let _ = localization.currentLanguage // Force view to re-render when language changes
+        let _ = settings.currentCurrency // Force view to re-render when currency changes
+
         ZStack {
             Color.creamBackground
                 .ignoresSafeArea()
@@ -49,11 +53,11 @@ struct ContentView: View {
                     VStack(spacing: 24) {
                         // Title
                         VStack(spacing: 4) {
-                            Text("Coffee Meter")
+                            Text("app.title".localized())
                                 .font(.system(size: 36, weight: .bold, design: .serif))
                                 .foregroundStyle(Color.coffeeBrown)
 
-                            Text("офіційний бухгалтер твоєї кавової залежності")
+                            Text("app.subtitle".localized())
                                 .font(.system(size: 14, weight: .regular))
                                 .foregroundStyle(Color.coffeeBrown.opacity(0.7))
                                 .italic()
@@ -77,7 +81,7 @@ struct ContentView: View {
                             addTestPurchase()
                         } label: {
                             HStack(spacing: 8) {
-                                Text("Записати ще одну каву")
+                                Text("button.add_coffee".localized())
                                 Image(systemName: "arrow.right")
                             }
                             .font(.system(size: 18, weight: .semibold))
@@ -91,7 +95,7 @@ struct ContentView: View {
 
                         // Monthly Spending Card
                         VStack(spacing: 12) {
-                            Text("ВИТРАЧЕНО ЦЬОГО МІСЯЦЯ")
+                            Text("card.monthly_spending".localized())
                                 .font(.system(size: 13, weight: .medium))
                                 .foregroundStyle(Color.accentOrange)
                                 .tracking(1)
@@ -102,7 +106,7 @@ struct ContentView: View {
                                 .minimumScaleFactor(0.5)
                                 .lineLimit(1)
 
-                            Text("Ще трохи — і кав'ярня внесе тебе у заповіт.")
+                            Text("card.monthly_quote".localized())
                                 .font(.system(size: 15, weight: .regular))
                                 .foregroundStyle(Color.coffeeBrown.opacity(0.8))
                                 .multilineTextAlignment(.center)
@@ -117,7 +121,7 @@ struct ContentView: View {
                         // Budget Progress Bar
                         VStack(spacing: 16) {
                             HStack {
-                                Text("ДО ГАНЬБИ ЛИШИЛОСЬ")
+                                Text("card.budget_remaining".localized())
                                     .font(.system(size: 13, weight: .medium))
                                     .foregroundStyle(Color.accentOrange)
                                     .tracking(1)
@@ -155,7 +159,7 @@ struct ContentView: View {
                         } label: {
                             HStack(spacing: 8) {
                                 Image(systemName: "sparkles")
-                                Text("Придумати відмазку (AI)")
+                                Text("button.ai_excuse".localized())
                                     .font(.system(size: 16, weight: .medium))
                             }
                             .foregroundStyle(Color.coffeeBrown)
@@ -237,15 +241,18 @@ struct ContentView: View {
 
 struct ChartView: View {
     @Environment(\.dismiss) private var dismiss
+    @StateObject private var localization = LocalizationManager.shared
 
     var body: some View {
+        let _ = localization.currentLanguage // Force view to re-render when language changes
+
         NavigationStack {
-            Text("Chart - Coming Soon")
-                .navigationTitle("Статистика")
+            Text("chart.placeholder".localized())
+                .navigationTitle("chart.title".localized())
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
-                        Button("Закрити") {
+                        Button("settings.close".localized()) {
                             dismiss()
                         }
                     }

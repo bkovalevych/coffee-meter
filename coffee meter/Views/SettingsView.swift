@@ -13,12 +13,16 @@ struct SettingsView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var purchases: [CoffeePurchase]
 
+    @StateObject private var localization = LocalizationManager.shared
     @State private var settings = UserSettings.shared
     @State private var showComingSoon = false
     @State private var showResetConfirmation = false
     @State private var budgetText = ""
 
     var body: some View {
+        let _ = localization.currentLanguage // Force view to re-render when language changes
+        let _ = settings.currentCurrency // Force view to re-render when currency changes
+
         NavigationStack {
             ZStack {
                 Color.creamBackground
@@ -28,12 +32,12 @@ struct SettingsView: View {
                     VStack(spacing: 20) {
                         // Banks Section (Mocked)
                         VStack(alignment: .leading, spacing: 16) {
-                            Text("Підключені банки")
+                            Text("settings.banks.title".localized())
                                 .font(.system(size: 18, weight: .semibold))
                                 .foregroundStyle(Color.coffeeBrown)
 
-                            bankRow(name: "monobank", color: .black, isEnabled: false)
-                            bankRow(name: "Приват24", color: Color(red: 0.35, green: 0.63, blue: 0.31), isEnabled: false)
+                            bankRow(name: "settings.banks.monobank".localized(), color: .black, isEnabled: false)
+                            bankRow(name: "settings.banks.privat".localized(), color: Color(red: 0.35, green: 0.63, blue: 0.31), isEnabled: false)
                         }
                         .padding(20)
                         .background(Color.lightCream)
@@ -41,7 +45,7 @@ struct SettingsView: View {
 
                         // Budget Section
                         VStack(alignment: .leading, spacing: 16) {
-                            Text("Місячний бюджет")
+                            Text("settings.budget.title".localized())
                                 .font(.system(size: 18, weight: .semibold))
                                 .foregroundStyle(Color.coffeeBrown)
 
@@ -65,7 +69,7 @@ struct SettingsView: View {
                                     .foregroundStyle(Color.coffeeBrown)
                             }
 
-                            Text("Максимальна сума витрат на каву за місяць")
+                            Text("settings.budget.description".localized())
                                 .font(.system(size: 13, weight: .regular))
                                 .foregroundStyle(Color.coffeeBrown.opacity(0.7))
                         }
@@ -75,16 +79,43 @@ struct SettingsView: View {
 
                         // Language Section
                         VStack(alignment: .leading, spacing: 16) {
-                            Text("Мова")
+                            Text("settings.language.title".localized())
                                 .font(.system(size: 18, weight: .semibold))
                                 .foregroundStyle(Color.coffeeBrown)
 
-                            Picker("Мова", selection: $settings.language) {
+                            Menu {
                                 ForEach(Language.allCases, id: \.self) { language in
-                                    Text(language.displayName).tag(language)
+                                    Button {
+                                        if settings.language != language {
+                                            settings.language = language
+                                            localization.setLanguage(language)
+                                        }
+                                    } label: {
+                                        HStack {
+                                            Text(language.displayName)
+                                            if settings.language == language {
+                                                Image(systemName: "checkmark")
+                                            }
+                                        }
+                                    }
                                 }
+                            } label: {
+                                HStack {
+                                    Text(settings.language.displayName)
+                                        .font(.system(size: 16, weight: .regular))
+                                        .foregroundStyle(Color.coffeeBrown)
+
+                                    Spacer()
+
+                                    Image(systemName: "chevron.down")
+                                        .font(.system(size: 14, weight: .semibold))
+                                        .foregroundStyle(Color.coffeeBrown.opacity(0.5))
+                                }
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 12)
+                                .background(Color.white)
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
                             }
-                            .pickerStyle(.segmented)
                         }
                         .padding(20)
                         .background(Color.lightCream)
@@ -92,16 +123,42 @@ struct SettingsView: View {
 
                         // Currency Section
                         VStack(alignment: .leading, spacing: 16) {
-                            Text("Валюта")
+                            Text("settings.currency.title".localized())
                                 .font(.system(size: 18, weight: .semibold))
                                 .foregroundStyle(Color.coffeeBrown)
 
-                            Picker("Валюта", selection: $settings.currency) {
+                            Menu {
                                 ForEach(Currency.allCases, id: \.self) { currency in
-                                    Text(currency.displayName).tag(currency)
+                                    Button {
+                                        if settings.currency != currency {
+                                            settings.currency = currency
+                                        }
+                                    } label: {
+                                        HStack {
+                                            Text(currency.displayName)
+                                            if settings.currency == currency {
+                                                Image(systemName: "checkmark")
+                                            }
+                                        }
+                                    }
                                 }
+                            } label: {
+                                HStack {
+                                    Text(settings.currency.displayName)
+                                        .font(.system(size: 16, weight: .regular))
+                                        .foregroundStyle(Color.coffeeBrown)
+
+                                    Spacer()
+
+                                    Image(systemName: "chevron.down")
+                                        .font(.system(size: 14, weight: .semibold))
+                                        .foregroundStyle(Color.coffeeBrown.opacity(0.5))
+                                }
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 12)
+                                .background(Color.white)
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
                             }
-                            .pickerStyle(.segmented)
                         }
                         .padding(20)
                         .background(Color.lightCream)
@@ -113,7 +170,7 @@ struct SettingsView: View {
                         } label: {
                             HStack(spacing: 8) {
                                 Image(systemName: "arrow.counterclockwise")
-                                Text("Скинути до заводських налаштувань")
+                                Text("settings.reset.button".localized())
                                     .font(.system(size: 16, weight: .medium))
                             }
                             .foregroundStyle(Color.white)
@@ -127,29 +184,29 @@ struct SettingsView: View {
                     .padding(20)
                 }
             }
-            .navigationTitle("Налаштування")
+            .navigationTitle("settings.title".localized())
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Готово") {
+                    Button("settings.done".localized()) {
                         dismiss()
                     }
                     .foregroundStyle(Color.coffeeBrown)
                     .fontWeight(.semibold)
                 }
             }
-            .alert("Незабаром!", isPresented: $showComingSoon) {
-                Button("OK", role: .cancel) { }
+            .alert("alert.coming_soon.title".localized(), isPresented: $showComingSoon) {
+                Button("alert.coming_soon.ok".localized(), role: .cancel) { }
             } message: {
-                Text("Підключення банків буде доступне в наступній версії")
+                Text("alert.coming_soon.bank_message".localized())
             }
-            .alert("Скинути налаштування?", isPresented: $showResetConfirmation) {
-                Button("Скасувати", role: .cancel) { }
-                Button("Скинути", role: .destructive) {
+            .alert("settings.reset.alert.title".localized(), isPresented: $showResetConfirmation) {
+                Button("settings.reset.alert.cancel".localized(), role: .cancel) { }
+                Button("settings.reset.alert.confirm".localized(), role: .destructive) {
                     resetToDefaults()
                 }
             } message: {
-                Text("Це видалить всі записи про покупки кави та скине бюджет до значення за замовчуванням (1000). Мова та валюта залишаться незмінними.")
+                Text("settings.reset.alert.message".localized())
             }
             .onAppear {
                 budgetText = String(format: "%.0f", settings.monthlyBudget)
@@ -175,7 +232,7 @@ struct SettingsView: View {
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(Color.coffeeBrown)
 
-                Text("Автозапис оплат кав'ярень")
+                Text("settings.banks.description".localized())
                     .font(.system(size: 13, weight: .regular))
                     .foregroundStyle(Color.coffeeBrown.opacity(0.6))
             }
@@ -184,15 +241,15 @@ struct SettingsView: View {
 
             Toggle("", isOn: .constant(false))
                 .labelsHidden()
-                .onChange(of: isEnabled) { _, _ in
-                    showComingSoon = true
-                }
                 .disabled(true)
                 .tint(Color.accentOrange)
         }
         .padding(16)
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 12))
+        .onTapGesture {
+            showComingSoon = true
+        }
     }
 
     private func resetToDefaults() {
