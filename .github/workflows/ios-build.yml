@@ -3,8 +3,6 @@ name: iOS Build
 on:
   push:
     branches: [ main, dev ]
-  pull_request:
-    branches: [ main, dev ]
   workflow_dispatch:
     inputs:
       environment:
@@ -55,7 +53,7 @@ jobs:
         echo "✅ Development Firebase configuration created"
 
     - name: Cache Swift Package Manager
-      uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2  # v4.0.0
+      uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a  # v4.2.0
       with:
         path: |
           .build
@@ -145,7 +143,7 @@ jobs:
         echo "✅ Production Firebase configuration created"
 
     - name: Cache Swift Package Manager
-      uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2  # v4.0.0
+      uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a  # v4.2.0
       with:
         path: |
           .build
@@ -200,94 +198,3 @@ jobs:
           ~/Library/Logs/DiagnosticReports/
           ~/Library/Developer/Xcode/DerivedData/*/Logs/
         retention-days: 7
-
-  # Pull Request builds (no secrets needed for syntax check)
-  build-pr:
-    name: Build (PR Check)
-    runs-on: macos-14
-    if: github.event_name == 'pull_request'
-    permissions:
-      contents: read
-      actions: read
-    timeout-minutes: 45
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11  # v4.1.1
-
-    - name: Select Xcode version
-      run: sudo xcode-select -s /Applications/Xcode_${{ env.XCODE_VERSION }}.app
-
-    - name: Show Xcode version
-      run: xcodebuild -version
-
-    - name: Create Dummy Firebase Config
-      run: |
-        echo "ℹ️  Creating dummy Firebase config for PR build check..."
-        cat > "coffee meter/GoogleService-Info.plist" << 'EOF'
-        <?xml version="1.0" encoding="UTF-8"?>
-        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-        <plist version="1.0">
-        <dict>
-          <key>API_KEY</key>
-          <string>dummy-api-key</string>
-          <key>GCM_SENDER_ID</key>
-          <string>123456789</string>
-          <key>PLIST_VERSION</key>
-          <string>1</string>
-          <key>BUNDLE_ID</key>
-          <string>useless.com.coffee-meter</string>
-          <key>PROJECT_ID</key>
-          <string>dummy-project</string>
-          <key>STORAGE_BUCKET</key>
-          <string>dummy-bucket</string>
-          <key>IS_ADS_ENABLED</key>
-          <false/>
-          <key>IS_ANALYTICS_ENABLED</key>
-          <false/>
-          <key>IS_APPINVITE_ENABLED</key>
-          <false/>
-          <key>IS_GCM_ENABLED</key>
-          <false/>
-          <key>IS_SIGNIN_ENABLED</key>
-          <false/>
-          <key>GOOGLE_APP_ID</key>
-          <string>1:123456789:ios:dummy</string>
-        </dict>
-        </plist>
-        EOF
-        echo "✅ Dummy config created (PR builds don't need real Firebase)"
-
-    - name: Cache Swift Package Manager
-      uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2  # v4.0.0
-      with:
-        path: |
-          .build
-          ~/Library/Developer/Xcode/DerivedData
-        key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
-        restore-keys: |
-          ${{ runner.os }}-spm-
-
-    - name: Resolve Swift Package Dependencies
-      run: |
-        xcodebuild -resolvePackageDependencies \
-          -scheme "${{ env.SCHEME }}" \
-          -configuration Debug
-
-    - name: Build iOS App (Debug)
-      run: |
-        xcodebuild clean build \
-          -scheme "${{ env.SCHEME }}" \
-          -configuration Debug \
-          -sdk iphonesimulator \
-          -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
-          CODE_SIGN_IDENTITY="" \
-          CODE_SIGNING_REQUIRED=NO \
-          CODE_SIGNING_ALLOWED=NO \
-          | xcpretty && exit ${PIPESTATUS[0]}
-
-    - name: Cleanup
-      if: always()
-      run: |
-        rm -f "coffee meter/GoogleService-Info.plist"
-        echo "🧹 Cleaned up dummy configuration"
