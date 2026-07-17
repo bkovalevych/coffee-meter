@@ -22,7 +22,7 @@ jobs:
   # Development builds (from dev branch or manual)
   build-development:
     name: Build (qa)
-    runs-on: macos-14
+    runs-on: macos-15
     # Run on develop branch OR manual workflow with qa env
     if: |
       github.ref == 'refs/heads/dev' ||
@@ -112,7 +112,7 @@ jobs:
   # Production builds (from main branch or manual)
   build-production:
     name: Build (Production)
-    runs-on: macos-14
+    runs-on: macos-15
     # Run on main branch OR manual workflow with production env
     if: |
       github.ref == 'refs/heads/main' ||

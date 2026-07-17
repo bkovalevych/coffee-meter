@@ -364,6 +364,7 @@
 			packageProductDependencies = (
 				579BBF30300A879E00502145 /* FirebaseAnalytics */,
 				579BBF32300A879E00502145 /* FirebaseCrashlytics */,
+				579BBF41300A879F00502146 /* SwiftProtobuf */,
 			);
 			productName = "coffee meter";
 			productReference = 57AB94503007CB5F0023E995 /* coffee meter.app */;
@@ -1205,6 +1206,14 @@
 				version = 11.7.0;
 			};
 		};
+		579BBF40300A879F00502146 /* XCRemoteSwiftPackageReference "swift-protobuf" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-protobuf.git";
+			requirement = {
+				kind = exactVersion;
+				version = 1.28.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1217,6 +1226,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 579BBF2F300A879E00502145 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCrashlytics;
+		};
+		579BBF41300A879F00502146 /* SwiftProtobuf */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 579BBF40300A879F00502146 /* XCRemoteSwiftPackageReference "swift-protobuf" */;
+			productName = SwiftProtobuf;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
