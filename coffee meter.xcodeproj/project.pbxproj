@@ -11,6 +11,9 @@
 		579BBDF0300A41EF00502145 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 579BBDEF300A41EF00502145 /* SwiftUI.framework */; };
 		579BBE01300A41F200502145 /* CoffeeMeterWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 579BBDEB300A41EF00502145 /* CoffeeMeterWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		579BBE85300A550F00502145 /* CoffeeMeterWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 579BBE7B300A550D00502145 /* CoffeeMeterWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		579BBEC5300A5EA900502145 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 579BBDED300A41EF00502145 /* WidgetKit.framework */; };
+		579BBEC6300A5EA900502145 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 579BBDEF300A41EF00502145 /* SwiftUI.framework */; };
+		579BBED3300A5EAB00502145 /* CoffeeMeterWatchWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 579BBEC4300A5EA900502145 /* CoffeeMeterWatchWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,6 +30,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 579BBE7A300A550D00502145;
 			remoteInfo = "CoffeeMeterWatch Watch App";
+		};
+		579BBED1300A5EAB00502145 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 57AB94483007CB5F0023E995 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 579BBEC3300A5EA900502145;
+			remoteInfo = CoffeeMeterWatchWidgetExtension;
 		};
 		57AB94603007CB610023E995 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -67,6 +77,17 @@
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		579BBED8300A5EAB00502145 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				579BBED3300A5EAB00502145 /* CoffeeMeterWatchWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -75,6 +96,8 @@
 		579BBDEF300A41EF00502145 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		579BBE76300A523400502145 /* CoffeeMeterWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CoffeeMeterWidgetExtension.entitlements; sourceTree = "<group>"; };
 		579BBE7B300A550D00502145 /* CoffeeMeterWatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CoffeeMeterWatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		579BBEC4300A5EA900502145 /* CoffeeMeterWatchWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CoffeeMeterWatchWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		579BBED9300A5EC000502145 /* CoffeeMeterWatchWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CoffeeMeterWatchWidgetExtension.entitlements; sourceTree = "<group>"; };
 		57AB94503007CB5F0023E995 /* coffee meter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "coffee meter.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		57AB945F3007CB610023E995 /* coffee meterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "coffee meterTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		57AB94693007CB610023E995 /* coffee meterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "coffee meterUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -87,6 +110,13 @@
 				Info.plist,
 			);
 			target = 579BBDEA300A41EF00502145 /* CoffeeMeterWidgetExtension */;
+		};
+		579BBED4300A5EAB00502145 /* Exceptions for "CoffeeMeterWatchWidget" folder in "CoffeeMeterWatchWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 579BBEC3300A5EA900502145 /* CoffeeMeterWatchWidgetExtension */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -107,6 +137,14 @@
 		579BBE7C300A550D00502145 /* CoffeeMeterWatch Watch App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "CoffeeMeterWatch Watch App";
+			sourceTree = "<group>";
+		};
+		579BBEC7300A5EA900502145 /* CoffeeMeterWatchWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				579BBED4300A5EAB00502145 /* Exceptions for "CoffeeMeterWatchWidget" folder in "CoffeeMeterWatchWidgetExtension" target */,
+			);
+			path = CoffeeMeterWatchWidget;
 			sourceTree = "<group>";
 		};
 		57AB94523007CB5F0023E995 /* coffee meter */ = {
@@ -140,6 +178,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		579BBEC1300A5EA900502145 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				579BBEC6300A5EA900502145 /* SwiftUI.framework in Frameworks */,
+				579BBEC5300A5EA900502145 /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -187,12 +234,14 @@
 		57AB94473007CB5F0023E995 = {
 			isa = PBXGroup;
 			children = (
+				579BBED9300A5EC000502145 /* CoffeeMeterWatchWidgetExtension.entitlements */,
 				579BBE76300A523400502145 /* CoffeeMeterWidgetExtension.entitlements */,
 				57AB94523007CB5F0023E995 /* coffee meter */,
 				57AB94623007CB610023E995 /* coffee meterTests */,
 				57AB946C3007CB610023E995 /* coffee meterUITests */,
 				579BBDF1300A41EF00502145 /* CoffeeMeterWidget */,
 				579BBE7C300A550D00502145 /* CoffeeMeterWatch Watch App */,
+				579BBEC7300A5EA900502145 /* CoffeeMeterWatchWidget */,
 				579BBDEC300A41EF00502145 /* Frameworks */,
 				57AB94513007CB5F0023E995 /* Products */,
 				579BBE4C300A489D00502145 /* Recovered References */,
@@ -207,6 +256,7 @@
 				57AB94693007CB610023E995 /* coffee meterUITests.xctest */,
 				579BBDEB300A41EF00502145 /* CoffeeMeterWidgetExtension.appex */,
 				579BBE7B300A550D00502145 /* CoffeeMeterWatch Watch App.app */,
+				579BBEC4300A5EA900502145 /* CoffeeMeterWatchWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -244,10 +294,12 @@
 				579BBE77300A550D00502145 /* Sources */,
 				579BBE78300A550D00502145 /* Frameworks */,
 				579BBE79300A550D00502145 /* Resources */,
+				579BBED8300A5EAB00502145 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				579BBED2300A5EAB00502145 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				579BBDF2300A41EF00502146 /* Shared */,
@@ -259,6 +311,29 @@
 			productName = "CoffeeMeterWatch Watch App";
 			productReference = 579BBE7B300A550D00502145 /* CoffeeMeterWatch Watch App.app */;
 			productType = "com.apple.product-type.application";
+		};
+		579BBEC3300A5EA900502145 /* CoffeeMeterWatchWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 579BBED5300A5EAB00502145 /* Build configuration list for PBXNativeTarget "CoffeeMeterWatchWidgetExtension" */;
+			buildPhases = (
+				579BBEC0300A5EA900502145 /* Sources */,
+				579BBEC1300A5EA900502145 /* Frameworks */,
+				579BBEC2300A5EA900502145 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				579BBDF2300A41EF00502146 /* Shared */,
+				579BBEC7300A5EA900502145 /* CoffeeMeterWatchWidget */,
+			);
+			name = CoffeeMeterWatchWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = CoffeeMeterWatchWidgetExtension;
+			productReference = 579BBEC4300A5EA900502145 /* CoffeeMeterWatchWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		57AB944F3007CB5F0023E995 /* coffee meter */ = {
 			isa = PBXNativeTarget;
@@ -349,6 +424,9 @@
 					579BBE7A300A550D00502145 = {
 						CreatedOnToolsVersion = 26.6;
 					};
+					579BBEC3300A5EA900502145 = {
+						CreatedOnToolsVersion = 26.6;
+					};
 					57AB944F3007CB5F0023E995 = {
 						CreatedOnToolsVersion = 26.6;
 					};
@@ -382,6 +460,7 @@
 				57AB94683007CB610023E995 /* coffee meterUITests */,
 				579BBDEA300A41EF00502145 /* CoffeeMeterWidgetExtension */,
 				579BBE7A300A550D00502145 /* CoffeeMeterWatch Watch App */,
+				579BBEC3300A5EA900502145 /* CoffeeMeterWatchWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -395,6 +474,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		579BBE79300A550D00502145 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		579BBEC2300A5EA900502145 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -439,6 +525,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		579BBEC0300A5EA900502145 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		57AB944C3007CB5F0023E995 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -472,6 +565,11 @@
 			isa = PBXTargetDependency;
 			target = 579BBE7A300A550D00502145 /* CoffeeMeterWatch Watch App */;
 			targetProxy = 579BBE83300A550F00502145 /* PBXContainerItemProxy */;
+		};
+		579BBED2300A5EAB00502145 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 579BBEC3300A5EA900502145 /* CoffeeMeterWatchWidgetExtension */;
+			targetProxy = 579BBED1300A5EAB00502145 /* PBXContainerItemProxy */;
 		};
 		57AB94613007CB610023E995 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -613,6 +711,75 @@
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 26.5;
+			};
+			name = Release;
+		};
+		579BBED6300A5EAB00502145 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = CoffeeMeterWatchWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CUZML8R4QZ;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CoffeeMeterWatchWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = CoffeeMeterWatchWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "useless.com.coffee-meter.watchkitapp.CoffeeMeterWatchWidget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.5;
+			};
+			name = Debug;
+		};
+		579BBED7300A5EAB00502145 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = CoffeeMeterWatchWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CUZML8R4QZ;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CoffeeMeterWatchWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = CoffeeMeterWatchWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "useless.com.coffee-meter.watchkitapp.CoffeeMeterWatchWidget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
@@ -947,6 +1114,15 @@
 			buildConfigurations = (
 				579BBE87300A550F00502145 /* Debug */,
 				579BBE88300A550F00502145 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		579BBED5300A5EAB00502145 /* Build configuration list for PBXNativeTarget "CoffeeMeterWatchWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				579BBED6300A5EAB00502145 /* Debug */,
+				579BBED7300A5EAB00502145 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

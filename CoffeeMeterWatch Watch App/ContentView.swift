@@ -15,16 +15,8 @@ struct ContentView: View {
     @State private var settings = UserSettings.shared
 
     var monthlyTotal: Double {
-        let calendar = Calendar.current
-        let now = Date()
-
-        let monthlyPurchases = purchases.filter { purchase in
-            calendar.isDate(purchase.date, equalTo: now, toGranularity: .month)
-        }
-
-        return monthlyPurchases.reduce(0.0) { sum, purchase in
-            sum + NSDecimalNumber(decimal: purchase.amount).doubleValue
-        }
+        let decimal = CoffeeCalculator.monthlyTotal(from: purchases)
+        return NSDecimalNumber(decimal: decimal).doubleValue
     }
 
     var budgetRemaining: Double {
@@ -32,7 +24,7 @@ struct ContentView: View {
     }
 
     var budgetProgress: Double {
-        min(monthlyTotal / settings.monthlyBudget, 1.0)
+        CoffeeCalculator.budgetProgress(spent: monthlyTotal, budget: settings.monthlyBudget)
     }
 
     var body: some View {

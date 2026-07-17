@@ -1,6 +1,6 @@
 //
-//  CoffeeMeterWidget.swift
-//  CoffeeMeterWidget
+//  CoffeeMeterWatchWidget.swift
+//  CoffeeMeterWatchWidget
 //
 //  Created by Bohdan Kovalevych on 17.07.2026.
 //
@@ -9,7 +9,7 @@ import WidgetKit
 import SwiftUI
 import SwiftData
 
-struct Provider: TimelineProvider {
+struct WatchProvider: TimelineProvider {
     let modelContainer: ModelContainer
 
     init() {
@@ -66,27 +66,28 @@ struct CoffeeEntry: TimelineEntry {
     let currency: Currency
 }
 
-// MARK: - Widget Views
+// MARK: - Complication Views
 
-struct CoffeeMeterCircularView: View {
-    var entry: Provider.Entry
+struct WatchCircularView: View {
+    var entry: WatchProvider.Entry
 
     var body: some View {
         ZStack {
             AccessoryWidgetBackground()
 
-            VStack(spacing: 2) {
-                Text(entry.currency.symbol)
-                    .font(.system(size: 14, weight: .semibold))
+            VStack(spacing: 1) {
+                Image(systemName: "cup.and.saucer.fill")
+                    .font(.system(size: 12))
+                    .foregroundStyle(.orange)
                 Text("\(Int(entry.monthlyTotal))")
-                    .font(.system(size: 16, weight: .bold))
+                    .font(.system(size: 14, weight: .bold))
             }
         }
     }
 }
 
-struct CoffeeMeterRectangularView: View {
-    var entry: Provider.Entry
+struct WatchRectangularView: View {
+    var entry: WatchProvider.Entry
 
     var progress: Double {
         CoffeeCalculator.budgetProgress(spent: entry.monthlyTotal, budget: entry.budget)
@@ -110,70 +111,94 @@ struct CoffeeMeterRectangularView: View {
     }
 }
 
-struct CoffeeMeterInlineView: View {
-    var entry: Provider.Entry
+struct WatchInlineView: View {
+    var entry: WatchProvider.Entry
 
     var body: some View {
         Text("☕ \(Int(entry.monthlyTotal))/\(Int(entry.budget)) \(entry.currency.symbol)")
     }
 }
 
-// MARK: - Widget Configuration
+struct WatchCornerView: View {
+    var entry: WatchProvider.Entry
 
-struct CoffeeMeterWidget: Widget {
-    let kind: String = "CoffeeMeterWidget"
+    var progress: Double {
+        CoffeeCalculator.budgetProgress(spent: entry.monthlyTotal, budget: entry.budget)
+    }
 
-    var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: Provider()) { entry in
-            if #available(iOS 17.0, *) {
-                CoffeeMeterWidgetEntryView(entry: entry)
-                    .containerBackground(.fill.tertiary, for: .widget)
-            } else {
-                CoffeeMeterWidgetEntryView(entry: entry)
-                    .padding()
-                    .background()
+    var body: some View {
+        Text("\(Int(entry.monthlyTotal))")
+            .font(.system(size: 20, weight: .bold))
+            .widgetLabel {
+                ProgressView(value: progress)
+                    .tint(.orange)
             }
-        }
-        .configurationDisplayName("Coffee Meter")
-        .description("Track your monthly coffee spending")
-        .supportedFamilies([.accessoryCircular, .accessoryRectangular, .accessoryInline])
     }
 }
 
-struct CoffeeMeterWidgetEntryView: View {
+// MARK: - Widget Configuration
+
+struct CoffeeMeterWatchWidget: Widget {
+    let kind: String = "CoffeeMeterWatchWidget"
+
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: kind, provider: WatchProvider()) { entry in
+            CoffeeMeterWatchWidgetEntryView(entry: entry)
+                .containerBackground(.fill.tertiary, for: .widget)
+        }
+        .configurationDisplayName("Coffee Meter")
+        .description("Track your monthly coffee spending")
+        .supportedFamilies([
+            .accessoryCircular,
+            .accessoryRectangular,
+            .accessoryInline,
+            .accessoryCorner
+        ])
+    }
+}
+
+struct CoffeeMeterWatchWidgetEntryView: View {
     @Environment(\.widgetFamily) var widgetFamily
-    var entry: Provider.Entry
+    var entry: WatchProvider.Entry
 
     var body: some View {
         switch widgetFamily {
         case .accessoryCircular:
-            CoffeeMeterCircularView(entry: entry)
+            WatchCircularView(entry: entry)
         case .accessoryRectangular:
-            CoffeeMeterRectangularView(entry: entry)
+            WatchRectangularView(entry: entry)
         case .accessoryInline:
-            CoffeeMeterInlineView(entry: entry)
+            WatchInlineView(entry: entry)
+        case .accessoryCorner:
+            WatchCornerView(entry: entry)
         default:
-            CoffeeMeterRectangularView(entry: entry)
+            WatchCircularView(entry: entry)
         }
     }
 }
 
 #Preview(as: .accessoryCircular) {
-    CoffeeMeterWidget()
+    CoffeeMeterWatchWidget()
 } timeline: {
     CoffeeEntry(date: .now, monthlyTotal: 450, budget: 1000, currency: .uah)
     CoffeeEntry(date: .now, monthlyTotal: 750, budget: 1000, currency: .uah)
 }
 
 #Preview(as: .accessoryRectangular) {
-    CoffeeMeterWidget()
+    CoffeeMeterWatchWidget()
 } timeline: {
     CoffeeEntry(date: .now, monthlyTotal: 450, budget: 1000, currency: .uah)
     CoffeeEntry(date: .now, monthlyTotal: 750, budget: 1000, currency: .uah)
 }
 
 #Preview(as: .accessoryInline) {
-    CoffeeMeterWidget()
+    CoffeeMeterWatchWidget()
+} timeline: {
+    CoffeeEntry(date: .now, monthlyTotal: 450, budget: 1000, currency: .uah)
+}
+
+#Preview(as: .accessoryCorner) {
+    CoffeeMeterWatchWidget()
 } timeline: {
     CoffeeEntry(date: .now, monthlyTotal: 450, budget: 1000, currency: .uah)
 }

@@ -190,22 +190,16 @@ struct ContentView: View {
     // MARK: - Computed Properties
 
     private var monthlyTotal: Decimal {
-        let calendar = Calendar.current
-        let now = Date()
-
-        return purchases
-            .filter { calendar.isDate($0.date, equalTo: now, toGranularity: .month) }
-            .reduce(Decimal.zero) { $0 + $1.amount }
+        CoffeeCalculator.monthlyTotal(from: purchases)
     }
 
     private var budgetRemaining: Decimal {
-        max(Decimal(settings.monthlyBudget) - monthlyTotal, 0)
+        CoffeeCalculator.budgetRemaining(spent: monthlyTotal, budget: settings.monthlyBudget)
     }
 
     private var budgetProgress: Double {
         let spent = NSDecimalNumber(decimal: monthlyTotal).doubleValue
-        let budget = settings.monthlyBudget
-        return min(spent / budget, 1.0)
+        return CoffeeCalculator.budgetProgress(spent: spent, budget: settings.monthlyBudget)
     }
 
     private var adaptivePriceFontSize: CGFloat {
