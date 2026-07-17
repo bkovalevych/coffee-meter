@@ -20,7 +20,7 @@ struct CoffeeCalculator {
 
         return purchases
             .filter { calendar.isDate($0.date, equalTo: now, toGranularity: .month) }
-            .reduce(Decimal.zero) { $0 + $1.amount }
+            .reduce(Decimal.zero) { $0 + ($1.amount * Decimal($1.quantity)) }
     }
 
     /// Calculate total spending for the current month from SwiftData context
@@ -41,7 +41,7 @@ struct CoffeeCalculator {
             }
 
             let total = monthlyPurchases.reduce(0.0) { sum, purchase in
-                sum + NSDecimalNumber(decimal: purchase.amount).doubleValue
+                sum + (NSDecimalNumber(decimal: purchase.amount).doubleValue * Double(purchase.quantity))
             }
 
             return total

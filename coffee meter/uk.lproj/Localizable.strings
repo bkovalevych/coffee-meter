@@ -57,3 +57,22 @@
 /* Currency Names */
 "currency.uah" = "Гривня (₴)";
 "currency.usd" = "Долар ($)";
+
+/* Coffee Types */
+"coffee.type.espresso" = "Еспресо";
+"coffee.type.americano" = "Американо";
+"coffee.type.latte" = "Лате";
+"coffee.type.cappuccino" = "Капучино";
+
+/* Add Purchase Screen */
+"add_purchase.title" = "Ще одна? Серйозно?";
+"add_purchase.custom_coffee_placeholder" = "Свій напій";
+"add_purchase.submit_button" = "Внести";
+"add_purchase.quantity" = "Кількість";
+"add_purchase.price" = "Ціна";
+"add_purchase.total" = "Всього";
+"add_purchase.add_custom" = "Додати свій напій";
+"add_purchase.custom_label" = "свій напій";
+"add_purchase.custom_name_label" = "Назва напою";
+"add_purchase.custom_price_label" = "Ціна";
+"add_purchase.add_button" = "Додати";

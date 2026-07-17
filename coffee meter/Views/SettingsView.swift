@@ -61,6 +61,12 @@ struct SettingsView: View {
                                     .onChange(of: budgetText) { _, newValue in
                                         if let value = Double(newValue), value > 0 {
                                             settings.monthlyBudget = value
+                                            AnalyticsManager.logSettingChanged(setting: "monthly_budget", value: String(value))
+                                            AnalyticsManager.setUserProperties(
+                                                currency: settings.currency,
+                                                language: settings.language,
+                                                monthlyBudget: value
+                                            )
                                         }
                                     }
 
@@ -89,6 +95,12 @@ struct SettingsView: View {
                                         if settings.language != language {
                                             settings.language = language
                                             localization.setLanguage(language)
+                                            AnalyticsManager.logSettingChanged(setting: "language", value: language.rawValue)
+                                            AnalyticsManager.setUserProperties(
+                                                currency: settings.currency,
+                                                language: language,
+                                                monthlyBudget: settings.monthlyBudget
+                                            )
                                         }
                                     } label: {
                                         HStack {
@@ -132,6 +144,12 @@ struct SettingsView: View {
                                     Button {
                                         if settings.currency != currency {
                                             settings.currency = currency
+                                            AnalyticsManager.logSettingChanged(setting: "currency", value: currency.rawValue)
+                                            AnalyticsManager.setUserProperties(
+                                                currency: currency,
+                                                language: settings.language,
+                                                monthlyBudget: settings.monthlyBudget
+                                            )
                                         }
                                     } label: {
                                         HStack {

@@ -10,6 +10,11 @@ import SwiftData
 
 @main
 struct CoffeeMeterWatch_Watch_AppApp: App {
+    init() {
+        // Initialize Watch Connectivity
+        _ = WatchConnectivityManager.shared
+    }
+
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             CoffeePurchase.self,

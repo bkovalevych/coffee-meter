@@ -1,0 +1,216 @@
+name: iOS PR Check
+
+on:
+  pull_request:
+    branches: [ main, dev ]
+    types: [ opened, synchronize, reopened ]
+
+env:
+  XCODE_VERSION: '15.4'
+  SCHEME: 'coffee meter'
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: macos-14
+    permissions:
+      contents: read
+      actions: read
+      pull-requests: write
+    timeout-minutes: 45
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11  # v4.1.1
+
+    - name: Select Xcode version
+      run: sudo xcode-select -s /Applications/Xcode_${{ env.XCODE_VERSION }}.app
+
+    - name: Show Xcode version
+      run: xcodebuild -version
+
+    - name: Create Dummy Firebase Config
+      run: |
+        echo "ℹ️  Creating dummy Firebase config for testing..."
+        cat > "coffee meter/GoogleService-Info.plist" << 'EOF'
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0">
+        <dict>
+          <key>API_KEY</key>
+          <string>dummy-api-key</string>
+          <key>GCM_SENDER_ID</key>
+          <string>123456789</string>
+          <key>PLIST_VERSION</key>
+          <string>1</string>
+          <key>BUNDLE_ID</key>
+          <string>useless.com.coffee-meter</string>
+          <key>PROJECT_ID</key>
+          <string>dummy-project</string>
+          <key>STORAGE_BUCKET</key>
+          <string>dummy-bucket</string>
+          <key>IS_ADS_ENABLED</key>
+          <false/>
+          <key>IS_ANALYTICS_ENABLED</key>
+          <false/>
+          <key>IS_APPINVITE_ENABLED</key>
+          <false/>
+          <key>IS_GCM_ENABLED</key>
+          <false/>
+          <key>IS_SIGNIN_ENABLED</key>
+          <false/>
+          <key>GOOGLE_APP_ID</key>
+          <string>1:123456789:ios:dummy</string>
+        </dict>
+        </plist>
+        EOF
+        echo "✅ Dummy Firebase config created"
+
+    - name: Cache Swift Package Manager
+      uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2  # v4.0.0
+      with:
+        path: |
+          .build
+          ~/Library/Developer/Xcode/DerivedData
+        key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-spm-
+
+    - name: Resolve Swift Package Dependencies
+      run: |
+        xcodebuild -resolvePackageDependencies \
+          -scheme "${{ env.SCHEME }}" \
+          -configuration Debug
+
+    - name: Run Unit Tests
+      run: |
+        set -o pipefail
+        xcodebuild test \
+          -scheme "${{ env.SCHEME }}" \
+          -configuration Debug \
+          -sdk iphonesimulator \
+          -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
+          -only-testing:coffee_meterTests \
+          -enableCodeCoverage YES \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          | tee test-output.log \
+          | xcpretty --simple --color || true
+
+    - name: Parse Test Results
+      if: always()
+      run: |
+        echo "📊 Test Results Summary"
+        echo "======================"
+
+        # Extract test results
+        if grep -q "Test Suite.*passed" test-output.log; then
+          PASSED=$(grep "Test Suite.*passed" test-output.log | tail -1 | sed 's/.*(\([0-9]*\) tests).*/\1/')
+          echo "✅ Tests Passed: $PASSED"
+        fi
+
+        if grep -q "Test Suite.*failed" test-output.log; then
+          FAILED=$(grep "Test Suite.*failed" test-output.log | tail -1 | sed 's/.*(\([0-9]*\) failures).*/\1/')
+          echo "❌ Tests Failed: $FAILED"
+        fi
+
+        # Show any failures
+        if grep -q "FAILED" test-output.log; then
+          echo ""
+          echo "Failed Tests:"
+          grep "FAILED" test-output.log || true
+        fi
+
+    - name: Generate Test Report
+      if: always()
+      run: |
+        # Find the latest test results
+        TEST_RESULTS=$(find ~/Library/Developer/Xcode/DerivedData -name "*.xcresult" -type d | sort -r | head -1)
+
+        if [ -n "$TEST_RESULTS" ]; then
+          echo "📝 Generating detailed test report..."
+          xcrun xcresulttool get --format json --path "$TEST_RESULTS" > test-results.json
+
+          # Extract summary
+          echo ""
+          echo "Test Summary:"
+          xcrun xcresulttool get --path "$TEST_RESULTS" | head -20
+        fi
+
+    - name: Upload Test Results
+      if: always()
+      uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8  # v4.3.0
+      with:
+        name: test-results
+        path: |
+          test-output.log
+          test-results.json
+        retention-days: 7
+        if-no-files-found: ignore
+
+    - name: Upload Test Coverage
+      if: always()
+      uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8  # v4.3.0
+      with:
+        name: code-coverage
+        path: |
+          ~/Library/Developer/Xcode/DerivedData/**/Coverage.profdata
+          ~/Library/Developer/Xcode/DerivedData/**/*.xcresult
+        retention-days: 7
+        if-no-files-found: ignore
+
+    - name: Cleanup
+      if: always()
+      run: |
+        rm -f "coffee meter/GoogleService-Info.plist"
+        rm -f test-output.log
+        rm -f test-results.json
+        echo "🧹 Cleaned up test artifacts"
+
+    - name: Comment PR with Results
+      if: always() && github.event_name == 'pull_request'
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # v7.0.1
+      with:
+        script: |
+          const fs = require('fs');
+
+          let testOutput = '';
+          try {
+            testOutput = fs.readFileSync('test-output.log', 'utf8');
+          } catch (e) {
+            testOutput = 'Could not read test output';
+          }
+
+          // Parse test results
+          const passedMatch = testOutput.match(/Test Suite.*passed.*\((\d+) tests\)/);
+          const failedMatch = testOutput.match(/Test Suite.*failed.*\((\d+) failures\)/);
+
+          const passed = passedMatch ? passedMatch[1] : '0';
+          const failed = failedMatch ? failedMatch[1] : '0';
+
+          const status = failed === '0' ? '✅' : '❌';
+
+          const comment = `## ${status} Test Results
+
+          **Passed:** ${passed} tests
+          **Failed:** ${failed} tests
+
+          ${failed !== '0' ? '⚠️ Some tests failed. Please check the logs.' : '🎉 All tests passed!'}
+
+          <details>
+          <summary>View Test Details</summary>
+
+          \`\`\`
+          ${testOutput.slice(-2000)}
+          \`\`\`
+
+          </details>
+          `;
+
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });

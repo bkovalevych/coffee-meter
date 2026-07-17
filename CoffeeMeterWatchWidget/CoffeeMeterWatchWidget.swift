@@ -152,8 +152,13 @@ struct CoffeeMeterWatchWidget: Widget {
             .accessoryCircular,
             .accessoryRectangular,
             .accessoryInline,
-            .accessoryCorner
-        ])
+        ] + {
+            #if os(watchOS)
+            return [.accessoryCorner]
+            #else
+            return []
+            #endif
+        }())
     }
 }
 
@@ -197,8 +202,10 @@ struct CoffeeMeterWatchWidgetEntryView: View {
     CoffeeEntry(date: .now, monthlyTotal: 450, budget: 1000, currency: .uah)
 }
 
+#if os(watchOS)
 #Preview(as: .accessoryCorner) {
     CoffeeMeterWatchWidget()
 } timeline: {
     CoffeeEntry(date: .now, monthlyTotal: 450, budget: 1000, currency: .uah)
 }
+#endif

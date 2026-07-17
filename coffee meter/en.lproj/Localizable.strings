@@ -57,3 +57,22 @@
 /* Currency Names */
 "currency.uah" = "Hryvnia (₴)";
 "currency.usd" = "Dollar ($)";
+
+/* Coffee Types */
+"coffee.type.espresso" = "Espresso";
+"coffee.type.americano" = "Americano";
+"coffee.type.latte" = "Latte";
+"coffee.type.cappuccino" = "Cappuccino";
+
+/* Add Purchase Screen */
+"add_purchase.title" = "Another one? Seriously?";
+"add_purchase.custom_coffee_placeholder" = "Your own drink";
+"add_purchase.submit_button" = "Add";
+"add_purchase.quantity" = "Quantity";
+"add_purchase.price" = "Price";
+"add_purchase.total" = "Total";
+"add_purchase.add_custom" = "Add custom drink";
+"add_purchase.custom_label" = "custom drink";
+"add_purchase.custom_name_label" = "Drink name";
+"add_purchase.custom_price_label" = "Price";
+"add_purchase.add_button" = "Add";

@@ -16,6 +16,7 @@ struct ContentView: View {
     @State private var settings = UserSettings.shared
     @State private var showSettings = false
     @State private var showChart = false
+    @State private var showAddPurchase = false
 
     var body: some View {
         let _ = localization.currentLanguage // Force view to re-render when language changes
@@ -30,6 +31,7 @@ struct ContentView: View {
                 HStack {
                     Button {
                         showSettings = true
+                        AnalyticsManager.logSettingsOpened()
                     } label: {
                         Image(systemName: "gearshape.fill")
                             .font(.title2)
@@ -40,6 +42,7 @@ struct ContentView: View {
 
                     Button {
                         showChart = true
+                        AnalyticsManager.logChartOpened()
                     } label: {
                         Image(systemName: "chart.bar.fill")
                             .font(.title2)
@@ -78,7 +81,7 @@ struct ContentView: View {
 
                         // Add Coffee Button
                         Button {
-                            addTestPurchase()
+                            showAddPurchase = true
                         } label: {
                             HStack(spacing: 8) {
                                 Text("button.add_coffee".localized())
@@ -179,11 +182,19 @@ struct ContentView: View {
                 .scrollDismissesKeyboard(.interactively)
             }
         }
+        .onAppear {
+            // Debug: Print App Group contents on iPhone
+            print("📱 iPhone App Group Debug:")
+            CoffeeTypeManager.shared.debugPrintAppGroupContents()
+        }
         .sheet(isPresented: $showSettings) {
             SettingsView()
         }
         .sheet(isPresented: $showChart) {
             ChartView()
+        }
+        .sheet(isPresented: $showAddPurchase) {
+            AddPurchaseView()
         }
     }
 
@@ -221,14 +232,6 @@ struct ContentView: View {
         }
     }
 
-    // MARK: - Actions
-
-    private func addTestPurchase() {
-        withAnimation {
-            let purchase = CoffeePurchase(amount: Decimal(string: "45.00")!, note: "Ранкове латте")
-            modelContext.insert(purchase)
-        }
-    }
 }
 
 // MARK: - Placeholder Views

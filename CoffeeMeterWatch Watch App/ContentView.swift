@@ -13,6 +13,7 @@ struct ContentView: View {
     @Query(sort: \CoffeePurchase.date, order: .reverse) private var purchases: [CoffeePurchase]
 
     @State private var settings = UserSettings.shared
+    @State private var showingAddCoffee = false
 
     var monthlyTotal: Double {
         let decimal = CoffeeCalculator.monthlyTotal(from: purchases)
@@ -56,7 +57,7 @@ struct ContentView: View {
 
             // Add coffee button
             Button {
-                addCoffee()
+                showingAddCoffee = true
             } label: {
                 Label("Add Coffee", systemImage: "plus")
                     .font(.headline)
@@ -65,12 +66,8 @@ struct ContentView: View {
             .tint(.orange)
         }
         .padding()
-    }
-
-    private func addCoffee() {
-        withAnimation {
-            let purchase = CoffeePurchase(amount: Decimal(string: "45.00")!, note: "Apple Watch")
-            modelContext.insert(purchase)
+        .sheet(isPresented: $showingAddCoffee) {
+            AddCoffeeView()
         }
     }
 }
