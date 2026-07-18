@@ -1,0 +1,9 @@
+/* Coffee Types */
+"coffee.type.espresso" = "Espresso";
+"coffee.type.americano" = "Americano";
+"coffee.type.latte" = "Latte";
+"coffee.type.cappuccino" = "Cappuccino";
+
+/* Add Coffee Screen */
+"add_coffee.title" = "Add Coffee";
+"add_coffee.button" = "Add";
