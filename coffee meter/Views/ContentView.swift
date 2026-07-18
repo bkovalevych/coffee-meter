@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import Charts
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
@@ -234,28 +235,189 @@ struct ContentView: View {
 
 }
 
-// MARK: - Placeholder Views
+// MARK: - Statistics View
 
 struct ChartView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
+    @Query(sort: \CoffeePurchase.date, order: .reverse) private var purchases: [CoffeePurchase]
+
     @StateObject private var localization = LocalizationManager.shared
+    @State private var settings = UserSettings.shared
 
     var body: some View {
-        let _ = localization.currentLanguage // Force view to re-render when language changes
+        let _ = localization.currentLanguage
+        let _ = settings.currentCurrency
 
         NavigationStack {
-            Text("chart.placeholder".localized())
-                .navigationTitle("chart.title".localized())
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button("settings.close".localized()) {
-                            dismiss()
+            ZStack {
+                Color.creamBackground
+                    .ignoresSafeArea()
+
+                ScrollView {
+                    VStack(spacing: 24) {
+                        // Monthly Total Summary
+                        VStack(spacing: 8) {
+                            Text("chart.total_this_month".localized())
+                                .font(.system(size: 13, weight: .medium))
+                                .foregroundStyle(Color.accentOrange)
+                                .tracking(1)
+
+                            Text(monthlyTotal, format: .currency(code: settings.currency.rawValue))
+                                .font(.system(size: 44, weight: .bold, design: .rounded))
+                                .foregroundStyle(Color.coffeeBrown)
                         }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 20)
+                        .background(Color.lightCream)
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                        .padding(.horizontal, 20)
+                        .padding(.top, 8)
+
+                        // Weekly Total Summary
+                        VStack(spacing: 8) {
+                            Text("chart.weekly_expenses".localized())
+                                .font(.system(size: 13, weight: .medium))
+                                .foregroundStyle(Color.accentOrange)
+                                .tracking(1)
+
+                            Text(weeklyTotal, format: .currency(code: settings.currency.rawValue))
+                                .font(.system(size: 44, weight: .bold, design: .rounded))
+                                .foregroundStyle(Color.coffeeBrown)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 20)
+                        .background(Color.lightCream)
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                        .padding(.horizontal, 20)
+
+                        // Daily Expenses Chart
+                        VStack(alignment: .leading, spacing: 16) {
+                            Text("chart.daily_expenses".localized())
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundStyle(Color.coffeeBrown)
+                                .padding(.horizontal, 20)
+
+                            if dailyData.isEmpty {
+                                VStack(spacing: 12) {
+                                    Image(systemName: "chart.bar.xaxis")
+                                        .font(.system(size: 48))
+                                        .foregroundStyle(Color.coffeeBrown.opacity(0.3))
+
+                                    Text("chart.no_data".localized())
+                                        .font(.system(size: 16, weight: .medium))
+                                        .foregroundStyle(Color.coffeeBrown.opacity(0.6))
+                                }
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 60)
+                            } else {
+                                Chart(dailyData) { item in
+                                    BarMark(
+                                        x: .value("chart.day".localized(), item.day),
+                                        y: .value("chart.amount".localized(), item.total)
+                                    )
+                                    .foregroundStyle(Color.accentOrange.gradient)
+                                    .cornerRadius(6)
+                                }
+                                .frame(height: 250)
+                                .chartXAxis {
+                                    AxisMarks(values: .automatic) { value in
+                                        AxisValueLabel()
+                                            .foregroundStyle(Color.coffeeBrown.opacity(0.7))
+                                    }
+                                }
+                                .chartYAxis {
+                                    AxisMarks { value in
+                                        AxisValueLabel()
+                                            .foregroundStyle(Color.coffeeBrown.opacity(0.7))
+                                    }
+                                }
+                                .padding(.horizontal, 20)
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 20)
+                        .background(Color.lightCream)
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                        .padding(.horizontal, 20)
+
+                        Spacer(minLength: 20)
                     }
                 }
+            }
+            .navigationTitle("chart.title".localized())
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("settings.close".localized()) {
+                        dismiss()
+                    }
+                    .foregroundStyle(Color.coffeeBrown)
+                }
+            }
         }
     }
+
+    // MARK: - Computed Properties
+
+    private var monthlyTotal: Decimal {
+        CoffeeCalculator.monthlyTotal(from: purchases)
+    }
+
+    private var weeklyTotal: Decimal {
+        let calendar = Calendar.current
+        let now = Date()
+
+        // Get start of current week
+        guard let weekStart = calendar.dateInterval(of: .weekOfYear, for: now)?.start else {
+            return 0
+        }
+
+        // Filter purchases for current week
+        let weekPurchases = purchases.filter { purchase in
+            guard let purchaseWeekStart = calendar.dateInterval(of: .weekOfYear, for: purchase.date)?.start else {
+                return false
+            }
+            return calendar.isDate(purchaseWeekStart, equalTo: weekStart, toGranularity: .day)
+        }
+
+        // Calculate total
+        return weekPurchases.reduce(Decimal.zero) { $0 + ($1.amount * Decimal($1.quantity)) }
+    }
+
+    private var dailyData: [DailyExpense] {
+        let calendar = Calendar.current
+        let now = Date()
+
+        // Filter purchases for current month
+        let monthPurchases = purchases.filter {
+            calendar.isDate($0.date, equalTo: now, toGranularity: .month)
+        }
+
+        // Group by day
+        let grouped = Dictionary(grouping: monthPurchases) { purchase -> Int in
+            calendar.component(.day, from: purchase.date)
+        }
+
+        // Calculate daily totals
+        let dailyTotals = grouped.map { day, purchases -> DailyExpense in
+            let total = purchases.reduce(0.0) { sum, purchase in
+                sum + (NSDecimalNumber(decimal: purchase.amount).doubleValue * Double(purchase.quantity))
+            }
+            return DailyExpense(day: day, total: total)
+        }
+
+        // Sort by day
+        return dailyTotals.sorted { $0.day < $1.day }
+    }
+}
+
+// MARK: - Data Models
+
+struct DailyExpense: Identifiable {
+    let id = UUID()
+    let day: Int
+    let total: Double
 }
 
 #Preview {

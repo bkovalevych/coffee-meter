@@ -49,6 +49,12 @@
 /* Chart Screen */
 "chart.title" = "Statistics";
 "chart.placeholder" = "Chart - Coming Soon";
+"chart.total_this_month" = "TOTAL THIS MONTH";
+"chart.weekly_expenses" = "THIS WEEK";
+"chart.daily_expenses" = "Daily Expenses";
+"chart.no_data" = "No purchases this month";
+"chart.day" = "Day";
+"chart.amount" = "Amount";
 
 /* Language Names */
 "language.ukrainian" = "Ukrainian";

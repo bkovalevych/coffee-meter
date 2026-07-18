@@ -49,6 +49,12 @@
 /* Chart Screen */
 "chart.title" = "Статистика";
 "chart.placeholder" = "Chart - Coming Soon";
+"chart.total_this_month" = "ВСЬОГО ЗА МІСЯЦЬ";
+"chart.weekly_expenses" = "ЦЬОГО ТИЖНЯ";
+"chart.daily_expenses" = "Щоденні витрати";
+"chart.no_data" = "Немає покупок цього місяця";
+"chart.day" = "День";
+"chart.amount" = "Сума";
 
 /* Language Names */
 "language.ukrainian" = "Українська";
