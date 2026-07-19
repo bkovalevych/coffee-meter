@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import WidgetKit
 
 struct AddPurchaseView: View {
     @Environment(\.dismiss) private var dismiss
@@ -408,6 +409,13 @@ struct AddPurchaseView: View {
 
             // Save and dismiss
             try? modelContext.save()
+
+            // Notify Watch about new purchase
+            WatchConnectivityManager.shared.notifyPurchaseAdded()
+
+            // Refresh iPhone widget immediately
+            WidgetCenter.shared.reloadTimelines(ofKind: "CoffeeMeterWidget")
+
             dismiss()
         }
     }

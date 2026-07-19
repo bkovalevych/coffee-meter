@@ -8,6 +8,7 @@
 import Foundation
 import WatchConnectivity
 import Combine
+import WidgetKit
 
 /// Manages communication between iPhone and Apple Watch
 /// Coffee data is shared via App Groups on real devices, but WatchConnectivity is used
@@ -62,6 +63,18 @@ class WatchConnectivityManager: NSObject, ObservableObject {
 
         print("✅ Synced coffee data to Watch: \(prices.count) prices, \(customCoffees.count) custom coffees")
     }
+
+    /// Notify Watch that a purchase was added (triggers context refresh)
+    func notifyPurchaseAdded() {
+        guard WCSession.default.activationState == .activated else {
+            print("⚠️ WCSession not activated, purchase notification skipped")
+            return
+        }
+
+        // Use transferUserInfo for reliable delivery even if Watch isn't reachable
+        WCSession.default.transferUserInfo(["action": "purchaseAdded"])
+        print("✅ Notified Watch about new purchase")
+    }
 }
 
 // MARK: - WCSessionDelegate
@@ -98,4 +111,24 @@ extension WatchConnectivityManager: WCSessionDelegate {
             }
         }
     }
+
+    nonisolated func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
+        print("📨 Received userInfo from Watch: \(userInfo)")
+
+        Task { @MainActor in
+            if userInfo["action"] as? String == "purchaseAdded" {
+                print("📱 Watch added a purchase, posting refresh notification...")
+                NotificationCenter.default.post(name: .purchaseDataChanged, object: nil)
+
+                // Refresh iPhone widget immediately
+                WidgetCenter.shared.reloadTimelines(ofKind: "CoffeeMeterWidget")
+            }
+        }
+    }
+}
+
+// MARK: - Notification Names
+
+extension Notification.Name {
+    static let purchaseDataChanged = Notification.Name("purchaseDataChanged")
 }
