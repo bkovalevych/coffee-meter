@@ -188,6 +188,10 @@ struct ContentView: View {
             print("📱 iPhone App Group Debug:")
             CoffeeTypeManager.shared.debugPrintAppGroupContents()
         }
+        .onReceive(NotificationCenter.default.publisher(for: .purchaseDataChanged)) { _ in
+            print("📱 Purchase data changed, refreshing context...")
+            modelContext.processPendingChanges()
+        }
         .sheet(isPresented: $showSettings) {
             SettingsView()
         }
