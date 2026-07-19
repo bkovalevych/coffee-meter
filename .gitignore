@@ -73,3 +73,13 @@ fastlane/test_output
 !*.xcodeproj/project.pbxproj
 !*.xcodeproj/xcshareddata/
 !*.xcodeproj/project.xcworkspace/
+
+# Firebase - ignore in all directories
+**/GoogleService-Info.plist
+GoogleService-Info.plist
+
+# Secrets and configuration
+*.secret
+*.env
+.env*
+!.env.example

@@ -1,21 +1,16 @@
 //
-//  coffee_meterApp.swift
-//  coffee meter
+//  CoffeeMeterWatchApp.swift
+//  CoffeeMeterWatch Watch App
 //
-//  Created by Bohdan Kovalevych on 15.07.2026.
+//  Created by Bohdan Kovalevych on 17.07.2026.
 //
 
 import SwiftUI
 import SwiftData
-import FirebaseCore
-import FirebaseCrashlytics
 
 @main
-struct CoffeeMeterApp: App {
+struct CoffeeMeterWatch_Watch_AppApp: App {
     init() {
-        // Initialize Firebase
-        FirebaseApp.configure()
-
         // Initialize Watch Connectivity
         _ = WatchConnectivityManager.shared
     }
@@ -26,13 +21,8 @@ struct CoffeeMeterApp: App {
         ])
 
         let appGroupID = "group.useless.com.coffee-meter"
-        guard let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupID) else {
-            fatalError("App Group container not found. Check that App Groups entitlement is properly configured.")
-        }
-
-        let modelConfiguration = ModelConfiguration(
-            url: containerURL.appendingPathComponent("CoffeeMeter.sqlite")
-        )
+        let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupID)!
+        let modelConfiguration = ModelConfiguration(url: containerURL.appendingPathComponent("CoffeeMeter.sqlite"))
 
         do {
             return try ModelContainer(for: schema, configurations: [modelConfiguration])

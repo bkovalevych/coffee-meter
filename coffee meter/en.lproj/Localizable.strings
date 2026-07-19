@@ -1,0 +1,84 @@
+/* Main Screen */
+"app.title" = "Coffee Meter";
+"app.subtitle" = "official accountant of your coffee addiction";
+"button.add_coffee" = "Record another coffee";
+"card.monthly_spending" = "SPENT THIS MONTH";
+"card.monthly_quote" = "A bit more — and the coffee shop will put you in their will.";
+"card.budget_remaining" = "SHAME REMAINING";
+"button.ai_excuse" = "Come up with an excuse (AI)";
+
+/* Settings Screen */
+"settings.title" = "Settings";
+"settings.done" = "Done";
+"settings.close" = "Close";
+
+/* Settings - Banks Section */
+"settings.banks.title" = "Connected Banks";
+"settings.banks.description" = "Auto-record coffee shop payments";
+"settings.banks.monobank" = "monobank";
+"settings.banks.privat" = "Privat24";
+
+/* Settings - Budget Section */
+"settings.budget.title" = "Monthly Budget";
+"settings.budget.description" = "Maximum amount to spend on coffee per month";
+
+/* Settings - Language Section */
+"settings.language.title" = "Language";
+"settings.language.picker_label" = "Language";
+
+/* Settings - Currency Section */
+"settings.currency.title" = "Currency";
+"settings.currency.picker_label" = "Currency";
+
+/* Settings - Reset Section */
+"settings.reset.button" = "Reset to Factory Settings";
+"settings.reset.alert.title" = "Reset Settings?";
+"settings.reset.alert.message" = "This will delete all coffee purchase records and reset the budget to the default value (1000). Language and currency will remain unchanged.";
+"settings.reset.alert.cancel" = "Cancel";
+"settings.reset.alert.confirm" = "Reset";
+
+/* Settings - Coming Soon Alert */
+"alert.coming_soon.title" = "Coming Soon!";
+"alert.coming_soon.bank_message" = "Bank connections will be available in the next version";
+"alert.coming_soon.ok" = "OK";
+
+/* Settings - Language Changed Alert */
+"alert.language_changed.title" = "Language Changed";
+"alert.language_changed.message" = "The change will be applied after restarting the app";
+
+/* Chart Screen */
+"chart.title" = "Statistics";
+"chart.placeholder" = "Chart - Coming Soon";
+"chart.total_this_month" = "TOTAL THIS MONTH";
+"chart.weekly_expenses" = "THIS WEEK";
+"chart.daily_expenses" = "Daily Expenses";
+"chart.no_data" = "No purchases this month";
+"chart.day" = "Day";
+"chart.amount" = "Amount";
+
+/* Language Names */
+"language.ukrainian" = "Ukrainian";
+"language.english" = "English";
+
+/* Currency Names */
+"currency.uah" = "Hryvnia (₴)";
+"currency.usd" = "Dollar ($)";
+
+/* Coffee Types */
+"coffee.type.espresso" = "Espresso";
+"coffee.type.americano" = "Americano";
+"coffee.type.latte" = "Latte";
+"coffee.type.cappuccino" = "Cappuccino";
+
+/* Add Purchase Screen */
+"add_purchase.title" = "Another one? Seriously?";
+"add_purchase.custom_coffee_placeholder" = "Your own drink";
+"add_purchase.submit_button" = "Add";
+"add_purchase.quantity" = "Quantity";
+"add_purchase.price" = "Price";
+"add_purchase.total" = "Total";
+"add_purchase.add_custom" = "Add custom drink";
+"add_purchase.custom_label" = "custom drink";
+"add_purchase.custom_name_label" = "Drink name";
+"add_purchase.custom_price_label" = "Price";
+"add_purchase.add_button" = "Add";
